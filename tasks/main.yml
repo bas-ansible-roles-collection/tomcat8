@@ -1,0 +1,7 @@
+---
+# Installs and configures Tomcat 8
+
+
+- include: register-role.yml
+  tags:
+    - BARC_ROLE_REGISTRATION
