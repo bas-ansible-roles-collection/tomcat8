@@ -1,0 +1,6 @@
+---
+# Default variables - inventory or playbook overrides will be respected
+
+# BARC specific variables
+tomcat8_barc_role_name: tomcat8
+tomcat8_barc_role_version: 0.1.0
