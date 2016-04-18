@@ -1,0 +1,11 @@
+---
+# Ensure the tomcat non-privileged user exists
+
+- name: list usernames of all system users
+  command: "cut -d : -f 1 /etc/passwd"
+  changed_when: false
+  register: tomcat8_test_fact_system_users_usernames
+- name: assert tomcat user exists
+  assert:
+    that:
+      - "'tomcat' in tomcat8_test_fact_system_users_usernames.stdout"

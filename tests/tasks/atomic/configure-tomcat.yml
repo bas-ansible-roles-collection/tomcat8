@@ -1,0 +1,62 @@
+---
+# Ensure tomcat is configured correctly
+
+- name: determine owner and group owner of tomcat installation directories
+  stat: path="{{ item }}"
+  with_items:
+    - /opt/tomcat8/conf
+    - /opt/tomcat8/logs
+    - /opt/tomcat8/temp
+    - /opt/tomcat8/work
+    - /opt/tomcat8/webapps
+  register: tomcat8_test_fact_tomcat_directories_permissions
+- name: assert owner and group owner are correct for tomcat installation directories
+  assert:
+    that:
+      - "item.stat.pw_name == 'tomcat'"
+      - "item.stat.gr_name == 'adm'"
+  with_items: tomcat8_test_fact_tomcat_directories_permissions.results
+
+- name: determine permissions of tomcat configuration file
+  stat: path=/opt/tomcat8/conf/server.xml
+  register: tomcat8_test_fact_server_xml
+- name: assert permissions are correct for tomcat configuration file
+  assert:
+    that:
+      - "tomcat8_test_fact_server_xml.stat.rusr == True"
+      - "tomcat8_test_fact_server_xml.stat.rgrp == True"
+      - "tomcat8_test_fact_server_xml.stat.wusr == True"
+      - "tomcat8_test_fact_server_xml.stat.wgrp == True"
+
+- name: determine status of symbolic links to conventional locations for tomcat directories
+  stat: path="{{ item }}"
+  with_items:
+    - /etc/tomcat8/conf
+    - /var/log/tomcat8
+    - /var/lib/tomcat8/webapps
+  register: tomcat8_test_fact_tomcat_symlinks
+- name: assert symbolic links to conventional locations for tomcat directories exist
+  assert:
+    that:
+      - "item.stat.exists == True"
+  with_items: tomcat8_test_fact_tomcat_symlinks.results
+
+- name: determine status of tomcat systemd unit file - CentOS
+  stat: path=/etc/systemd/system/tomcat8.service
+  register: tomcat8_test_fact_systemd_config_centos
+  when: ansible_distribution == "CentOS"
+- name: assert tomcat systemd unit file exists - CentOS
+  assert:
+    that:
+      - "tomcat8_test_fact_systemd_config_centos.stat.exists == True"
+  when: ansible_distribution == "CentOS"
+
+- name: determine status of tomcat upstart script - Ubuntu
+  stat: path=/etc/init/tomcat8.conf
+  register: tomcat8_test_fact_upstart_config_ubuntu
+  when: ansible_distribution == "Ubuntu"
+- name: assert tomcat systemd unit file exists - Ubuntu
+  assert:
+    that:
+      - "tomcat8_test_fact_upstart_config_ubuntu.stat.exists == True"
+  when: ansible_distribution == "Ubuntu"

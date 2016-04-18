@@ -1,0 +1,44 @@
+---
+# Ensure the system firewall is correctly configured for Tomcat 8
+
+- name: get contents of http firewall service definition file - CentOS/firewalld
+  command: "cat /etc/firewalld/services/tomcat8-http.xml"
+  changed_when: false
+  when: ansible_distribution == "CentOS"
+  register: tomcat8_test_fact_http_firewall_service_definition_files_contents_centos
+- name: assert http port is set correctly in http firewall service definition file - CentOS/firewalld
+  assert:
+    that: "'{{ tomcat8_firewall_port_http }}' in tomcat8_test_fact_http_firewall_service_definition_files_contents_centos.stdout"
+  when: ansible_distribution == "CentOS"
+
+- name: get contents of tomcat firewall service definition file - Ubuntu/UFW
+  command: cat /etc/ufw/applications.d/tomcat8
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+  register: tomcat8_test_fact_tomcat_firewall_service_definition_file_contents_ubuntu
+- name: assert ports are set correctly in tomcat firewall service definition file - Ubuntu/UFW
+  assert:
+    that:
+      - "'ports={{ tomcat8_firewall_port_http }}/tcp' in tomcat8_test_fact_tomcat_firewall_service_definition_file_contents_ubuntu.stdout"
+  when: ansible_distribution == "Ubuntu"
+
+# The trailing white-space in these assertions is required to prevent sub-string coincidence matches in firewalld
+- name: get permanent firewall rules for enabled services in the default firewall zone - CentOS/firewalld
+  command: firewall-cmd --list-services --permanent
+  changed_when: false
+  when: ansible_distribution == "CentOS"
+  register: tomcat8_test_fact_firewall_permanently_enabled_services
+- name: assert tomcat firewall service is active and permanent - CentOS/firewalld
+  assert:
+    that: "'tomcat8-http ' in tomcat8_test_fact_firewall_permanently_enabled_services.stdout + ' '"
+  when: ansible_distribution == "CentOS"
+
+- name: get firewall rules for enabled applications - Ubuntu/UFW
+  shell: sudo ufw status | tr -s ' ' | cut -d ' ' -f 1
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+  register: tomcat8_test_fact_firewall_enabled_services
+- name: assert relevant nginx firewall service is enabled - Ubuntu/UFW
+  assert:
+    that: "'tomcat8-http\n' in tomcat8_test_fact_firewall_enabled_services.stdout"
+  when: ansible_distribution == "Ubuntu"

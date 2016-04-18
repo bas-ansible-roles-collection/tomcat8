@@ -1,0 +1,10 @@
+---
+# Test if Tomcat 8 has been installed correctly
+
+- name: ensure the tomcat installation directory exists and contains the license file
+  stat: path=/opt/tomcat8/LICENSE
+  register: tomcat8_test_fact_license_file_exists
+- name: assert tomcat installation directory and license file exits
+  assert:
+    that:
+      - "tomcat8_test_fact_license_file_exists.stat.exists == true"
