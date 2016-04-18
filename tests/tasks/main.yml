@@ -1,5 +1,5 @@
 ---
-# Tests ...
+# Tests Tomcat 8 is installed and configured correctly
 
 # Flush handlers
 #
@@ -19,6 +19,10 @@
 # These tests mirror individual tasks to ensure they execute correctly
 # E.g. creating a user, installing the right package or generating a valid configuration file
 
+- include: atomic/install.yml
+- include: atomic/tomcat-user.yml
+- include: atomic/configure-tomcat.yml
+- include: atomic/configure-firewall.yml
 - include: atomic/register-role.yml
 
 # Functionality tests

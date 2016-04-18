@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Felix Fennell
-  description: Installs and configures Apache Tomcat Java servlet container 8
+  description: Downloads, installs and configures Apache Tomcat Java servlet container 8
   company: British Antarctic Survey
 
   issue_tracker_url: https://jira.ceh.ac.uk/browse/BARC

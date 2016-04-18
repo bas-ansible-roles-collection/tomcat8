@@ -1,5 +1,4 @@
-
-Tomcat 8 (tomcat8) - Testing
+# Tomcat 8 (`tomcat8`) - Testing
 
 ## Overview
 
@@ -17,11 +16,11 @@ multiple environments.
 
 The *Testing* environment tests a single scenario:
 
-* Installs and configures Tomcat 8
+* Downloads, installs and configures Tomcat 8
 
 The *Local Testing* environment tests multiple scenarios:
 
-1. ...
+1. Downloads, installs and configures Tomcat 8
 
 **Note:** *Local Testing* environments test scenarios on all operating systems this role supports. Services providing
 *Testing* environments may limit which operating system are available (e.g. SemaphoreCI only supports Ubuntu Trusty).
