@@ -7,6 +7,8 @@ Remember: Make sure to update `tomcat8_barc_role_version` variable when a new ve
  
 ## [Unreleased][unreleased]
  
+## 0.1.0 - 18/04/2016
+
 ### Added
- 
-* New role! - initial version based on 0.2.0 of the https://github.com/bas-ansible-roles-collection/tomcat8.git flavour of the BAS Base Project - Pristine
+
+* New role! - initial version based on 0.2.0 of the BARC flavour of the BAS Base Project - Pristine
